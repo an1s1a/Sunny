@@ -1,20 +1,11 @@
 package anisia.sunny;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +13,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new ForecastFragment())
                     .commit();
         }
     }
@@ -49,37 +40,4 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            List<String> listItem = new ArrayList<>();
-            listItem.add("Lun, 7 Dic, Sunny");
-            listItem.add("Mar, 8 Dic, Cloudy");
-            listItem.add("Lun, 9 Dic, Sunny");
-            listItem.add("Mar, 10 Dic, Sunny");
-            listItem.add("Lun, 11 Dic, Rainy");
-            listItem.add("Mar, 12 Dic, Windy");
-            listItem.add("Lun, 13 Dic, Sunny");
-            listItem.add("Mar, 14 Dic, Snowy");
-            listItem.add("Lun, 15 Dic, Sunny");
-            listItem.add("Mar, 16 Dic, Snowy");
-            listItem.add("Lun, 17 Dic, Snowy");
-            listItem.add("Mar, 18 Dic, Sunny");
-
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast,
-                    R.id.list_item_forecast_textview, listItem);
-            ListView listView = (ListView)rootView.findViewById(R.id.listview_forecast);
-            listView.setAdapter(arrayAdapter);
-            return rootView;
-        }
-    }
 }
