@@ -40,6 +40,7 @@ import java.util.List;
  */
 public class ForecastFragment extends Fragment {
 
+    private ArrayAdapter <String> arrayAdapter;
     public ForecastFragment() {
     }
 
@@ -83,7 +84,7 @@ public class ForecastFragment extends Fragment {
         listItem.add("Lun, 17 Dic, Snowy");
         listItem.add("Mar, 18 Dic, Sunny");
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast,
+        arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview, listItem);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(arrayAdapter);
@@ -96,6 +97,7 @@ public class ForecastFragment extends Fragment {
     //la SECONDA VARIABILE dovrebbe servire per indicare la percentuale di completamento della progress bar
     //la TERZA VARIABILE indica il tipo di valore che il task in background deve
     // ritornare al task principale in questo caso è la stringa con le previsioni meteo
+
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
@@ -182,10 +184,6 @@ public class ForecastFragment extends Fragment {
                 results[i] = day + "-" + description + "-" + highLow;
             }
 
-            for (String s: results){
-                Log.v(LOG_TAG, "Previsione: " + s);
-            }
-
             return results;
         }
 
@@ -228,7 +226,7 @@ public class ForecastFragment extends Fragment {
 
                 URL url = new URL(builtUri.toString());
 
-                Log.v(LOG_TAG, "Built URI "+ builtUri.toString());
+
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -256,7 +254,7 @@ public class ForecastFragment extends Fragment {
                     return null;
                 }
                 forecastJsonStr = buffer.toString();
-                Log.v(LOG_TAG,"Forecast JSON String: " + forecastJsonStr);
+
 
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
@@ -282,6 +280,16 @@ public class ForecastFragment extends Fragment {
                 Log.e(LOG_TAG, e.getMessage(), e);
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+            if(result != null){
+                arrayAdapter.clear();
+                for(String dayForecast : result){
+                    arrayAdapter.add(dayForecast);
+                }
+            }
         }
     }
 
