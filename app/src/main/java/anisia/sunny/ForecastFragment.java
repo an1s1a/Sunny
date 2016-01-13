@@ -4,6 +4,7 @@ package anisia.sunny;
  * Created by Utente on 13/12/2015.
  */
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -39,6 +41,8 @@ import java.util.List;
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment {
+
+    public final static String EXTRA_MESSAGE = "anisia.sunny.MESSAGE";
 
     private ArrayAdapter <String> arrayAdapter;
     public ForecastFragment() {
@@ -88,6 +92,14 @@ public class ForecastFragment extends Fragment {
                 R.id.list_item_forecast_textview, listItem);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(arrayAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String day = arrayAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(),DetailActivity.class).putExtra(Intent.EXTRA_TEXT, day);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
@@ -289,6 +301,9 @@ public class ForecastFragment extends Fragment {
                 for(String dayForecast : result){
                     arrayAdapter.add(dayForecast);
                 }
+                //In alternativa invece di usare il for puoi chiamare
+                // arrayAdapter.addAll(result);
+                //così viene aggiunta tutta la lista direttamente
             }
         }
     }
