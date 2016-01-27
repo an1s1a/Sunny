@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -46,29 +45,27 @@ public class ForecastFragment extends Fragment {
 
     public final static String EXTRA_MESSAGE = "anisia.sunny.MESSAGE";
 
-    private ArrayAdapter <String> arrayAdapter;
+    private ArrayAdapter<String> arrayAdapter;
+
     public ForecastFragment() {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.forecast_fragment, menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String city = sharedPref.getString(getString(R.string.pref_location_key),"Rotterdam");
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id==R.id.action_refresh){
-            FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
-            fetchWeatherTask.execute(city);
+        if (id == R.id.action_refresh) {
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -78,29 +75,17 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        List<String> listItem = new ArrayList<>();
-        listItem.add("Lun, 7 Dic, Sunny");
-        listItem.add("Mar, 8 Dic, Cloudy");
-        listItem.add("Lun, 9 Dic, Sunny");
-        listItem.add("Mar, 10 Dic, Sunny");
-        listItem.add("Lun, 11 Dic, Rainy");
-        listItem.add("Mar, 12 Dic, Windy");
-        listItem.add("Lun, 13 Dic, Sunny");
-        listItem.add("Mar, 14 Dic, Snowy");
-        listItem.add("Lun, 15 Dic, Sunny");
-        listItem.add("Mar, 16 Dic, Snowy");
-        listItem.add("Lun, 17 Dic, Snowy");
-        listItem.add("Mar, 18 Dic, Sunny");
+
 
         arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast,
-                R.id.list_item_forecast_textview, listItem);
+                R.id.list_item_forecast_textview, new ArrayList<String>());
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String day = arrayAdapter.getItem(position);
-                Intent intent = new Intent(getActivity(),DetailActivity.class).putExtra(Intent.EXTRA_TEXT, day);
+                Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, day);
                 startActivity(intent);
             }
         });
@@ -114,11 +99,24 @@ public class ForecastFragment extends Fragment {
     //la TERZA VARIABILE indica il tipo di valore che il task in background deve
     // ritornare al task principale in questo caso è la stringa con le previsioni meteo
 
+    public void updateWeather() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String city = sharedPref.getString(getString(R.string.pref_location_key), "Rotterdam");
+        FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
+        fetchWeatherTask.execute(city);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        updateWeather();
+    }
+
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
 
         private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
-        private String getReadableDateString(long time){
+        private String getReadableDateString(long time) {
             //SimpleDatefOrmat serve per formattare la data nel formato scelto, in questo caso
             //è EE MM dd
             // Because the API returns a unix timestamp (measured in seconds),
@@ -128,7 +126,7 @@ public class ForecastFragment extends Fragment {
         }
 
         //metodo per convertire le temperature min e max in Double in stringhe
-        public String formatHighLow(double high, double low){
+        public String formatHighLow(double high, double low) {
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
             String stringTemp = roundedLow + "/" + roundedHigh;
@@ -137,14 +135,15 @@ public class ForecastFragment extends Fragment {
         }
 
         //Ritorna la stringa da visualizzare nella lista
+
         /**
          * Take the String representing the complete forecast in JSON Format and
          * pull out the data we need to construct the Strings needed for the wireframes.
-         *
+         * <p/>
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
          */
-        private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays)throws JSONException{
+        private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays) throws JSONException {
             // These are the names of the JSON objects that need to be extracted
             final String OWM_LIST = "list";
             final String OWM_TEMP = "temp";
@@ -164,13 +163,13 @@ public class ForecastFragment extends Fragment {
             // normalized UTC date for all of our weather.
             Date dayTime = new Date();
             //con il codice seguente creiamo un oggetto GC a partire da dayTime per poter manipolare le date
-            GregorianCalendar calendar = (GregorianCalendar)Calendar.getInstance();
+            GregorianCalendar calendar = (GregorianCalendar) Calendar.getInstance();
             calendar.setTime(dayTime);
 
             // we start at the day returned by local time. Otherwise this is a mess.
             int startDay = calendar.get(Calendar.DAY_OF_MONTH);
             String[] results = new String[numDays];
-            for (int i = 0; i<weatherArray.length(); i++){
+            for (int i = 0; i < weatherArray.length(); i++) {
                 // For now, using the format "Day, description, hi/low"
                 String day;
                 String description;
@@ -182,7 +181,7 @@ public class ForecastFragment extends Fragment {
                 // The date/time is returned as a long.  We need to convert that
                 // into something human-readable, since most people won't read "1400356800" as
                 // "this saturday"
-                calendar.add(Calendar.DAY_OF_MONTH,1);
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
                 long dateTime = calendar.getTimeInMillis();
                 day = getReadableDateString(dateTime);
 
@@ -226,10 +225,10 @@ public class ForecastFragment extends Fragment {
 
                 //usa URIBUILDER per costruire l'url da richiedere
                 final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
-                final String QUERY_PARAM ="q";
+                final String QUERY_PARAM = "q";
                 final String FORMAT_PARAM = "mode";
                 final String UNITS_PARAM = "units";
-                final String DAYS_PARAM ="cnt";
+                final String DAYS_PARAM = "cnt";
                 final String APPID_PARAM = "APPID";
 
                 Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
@@ -292,7 +291,7 @@ public class ForecastFragment extends Fragment {
 
             try {
                 return getWeatherDataFromJson(forecastJsonStr, numDays);
-            } catch(JSONException e){
+            } catch (JSONException e) {
                 Log.e(LOG_TAG, e.getMessage(), e);
             }
             return null;
@@ -300,9 +299,9 @@ public class ForecastFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String[] result) {
-            if(result != null){
+            if (result != null) {
                 arrayAdapter.clear();
-                for(String dayForecast : result){
+                for (String dayForecast : result) {
                     arrayAdapter.add(dayForecast);
                 }
                 //In alternativa invece di usare il for puoi chiamare
