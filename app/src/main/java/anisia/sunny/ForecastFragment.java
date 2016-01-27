@@ -5,9 +5,11 @@ package anisia.sunny;
  */
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,10 +63,12 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String city = sharedPref.getString(getString(R.string.pref_location_key),"Rotterdam");
         int id = item.getItemId();
         if(id==R.id.action_refresh){
             FetchWeatherTask fetchWeatherTask = new FetchWeatherTask();
-            fetchWeatherTask.execute("Rotterdam");
+            fetchWeatherTask.execute(city);
             return true;
         }
         return super.onOptionsItemSelected(item);
