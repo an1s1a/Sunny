@@ -127,9 +127,18 @@ public class ForecastFragment extends Fragment {
 
         //metodo per convertire le temperature min e max in Double in stringhe
         public String formatHighLow(double high, double low) {
-            long roundedHigh = Math.round(high);
-            long roundedLow = Math.round(low);
-            String stringTemp = roundedLow + "/" + roundedHigh;
+            String stringTemp = "";
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String units = sharedPref.getString(getString(R.string.pref_temperature_units_key),"");
+
+            if (units == getString(R.string.pref_value_temperature_imperial)){
+                high = (high * 1.8) + 32;
+                low = (low * 1.8 )+ 32;
+            }
+
+            double roundedHigh = Math.round(high);
+            double roundedLow = Math.round(low);
+            stringTemp = roundedLow + "/" + roundedHigh;
 
             return stringTemp;
         }
