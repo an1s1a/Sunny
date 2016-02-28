@@ -66,7 +66,7 @@ public class TestUtilities extends AndroidTestCase {
         LocationEntry part of the WeatherContract.
      */
     static ContentValues createNorthPoleLocationValues() {
-       // Create a new map of values, where column names are the keys
+        // Create a new map of values, where column names are the keys
         ContentValues testValues = new ContentValues();
         testValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, TEST_LOCATION);
         testValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, "North Pole");

@@ -45,33 +45,43 @@ public class WeatherContract {
      */
     public static final class LocationEntry implements BaseColumns {
 
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_LOCATION).build();
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_LOCATION).build();
 
         public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
 
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_LOCATION;
-
+        // Table name
         public static final String TABLE_NAME = "location";
 
-        public static final String COLUMN_LOCATION_SETTING = "location_setiing";
+        // The location setting string is what will be sent to openweathermap
+        // as the location query.
+        public static final String COLUMN_LOCATION_SETTING = "location_setting";
 
-        public static final String COLUMN_COORD_LAT = "coord_lat";
-
-        public static final String COLUMN_COORD_LONG = "coord_long";
-
+        // Human readable location string, provided by the API.  Because for styling,
+        // "Mountain View" is more recognizable than 94043.
         public static final String COLUMN_CITY_NAME = "city_name";
 
+        // In order to uniquely pinpoint the location on the map when we launch the
+        // map intent, we store the latitude and longitude as returned by openweathermap.
+        public static final String COLUMN_COORD_LAT = "coord_lat";
+        public static final String COLUMN_COORD_LONG = "coord_long";
+
+        public static Uri buildLocationUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 
     /* Inner class that defines the table contents of the weather table */
     public static final class WeatherEntry implements BaseColumns {
 
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_WEATHER).build();
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_WEATHER).build();
 
         public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WEATHER;
-
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WEATHER;
 
