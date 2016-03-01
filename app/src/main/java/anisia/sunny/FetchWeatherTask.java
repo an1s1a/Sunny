@@ -121,6 +121,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         return resultStrs;
     }
 
+
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
