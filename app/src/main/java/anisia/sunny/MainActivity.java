@@ -1,7 +1,6 @@
 package anisia.sunny;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -52,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showOnMap(){
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String location = sharedPref.getString(getString(R.string.pref_location_key), "");
+        String location = Utility.getPreferredLocation(this);
 
         Uri uriLocation = Uri.parse("geo:0,0?").buildUpon().appendQueryParameter("q",location).build();
 
