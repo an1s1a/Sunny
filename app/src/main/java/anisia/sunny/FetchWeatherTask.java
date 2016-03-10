@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +28,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
     private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
-    private ArrayAdapter<String> mForecastAdapter;
+
     private final Context mContext;
 
     public FetchWeatherTask(Context context) {
@@ -87,8 +86,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
      * Fortunately parsing is easy:  constructor takes the JSON string and converts it
      * into an Object hierarchy for us.
      */
-    private void getWeatherDataFromJson(String forecastJsonStr,
-                                            String locationSetting)
+    private void getWeatherDataFromJson(String forecastJsonStr, String locationSetting)
             throws JSONException {
 
         // Now we have a String representing the complete forecast in JSON Format.
@@ -213,13 +211,12 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
             int inserted = 0;
             // add to database
             if ( cVVector.size() > 0 ) {
-                // Student: call bulkInsert to add the weatherEntries to the database here
                 ContentValues[] arrayValues = new ContentValues[cVVector.size()];
                 cVVector.toArray(arrayValues);
                 inserted = mContext.getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, arrayValues);
             }
 
-            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + " Inserted");
+            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + inserted +" Inserted");
 
 
         } catch (JSONException e) {
