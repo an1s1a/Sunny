@@ -12,14 +12,18 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String FORECASTFRAGMENR_TAG = "FFTAG";
+
+    private String location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        location = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment())
+                    .add(R.id.container, new ForecastFragment(), FORECASTFRAGMENR_TAG)
                     .commit();
         }
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
@@ -50,6 +54,19 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(location != null && !Utility.getPreferredLocation(this).equals(location)){
+            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENR_TAG);
+            if(ff != null){
+                ff.onLocationChanged();
+            }
+            location = Utility.getPreferredLocation(this);
+        }
+    }
+
     public void showOnMap(){
         String location = Utility.getPreferredLocation(this);
 
@@ -63,5 +80,4 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
         }
     }
-
 }

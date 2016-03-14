@@ -116,19 +116,6 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
     //la TERZA VARIABILE indica il tipo di valore che il task in background deve
     // ritornare al task principale in questo caso è la stringa con le previsioni meteo
 
-    public void updateWeather() {
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
-        String location = Utility.getPreferredLocation(getActivity());
-        weatherTask.execute(location);
-    }
-
-
-
-    @Override
-    public void onStart(){
-        super.onStart();
-        updateWeather();
-    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -148,5 +135,16 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         forecastAdapter.swapCursor(null);
+    }
+
+    public void updateWeather() {
+        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+        String location = Utility.getPreferredLocation(getActivity());
+        weatherTask.execute(location);
+    }
+
+    public void onLocationChanged(){
+        updateWeather();
+        getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
     }
 }
