@@ -6,6 +6,8 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import anisia.sunny.data.WeatherContract;
 
@@ -65,7 +67,27 @@ public class ForecastAdapter extends CursorAdapter {
         // our view is pretty simple here --- just a text view
         // we'll keep the UI functional with a simple (and slow!) binding.
 
-        //TextView tv = (TextView)view;
-        //tv.setText(convertCursorRowToUXFormat(cursor));
+        int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_ID);
+        ImageView iconView = (ImageView)view.findViewById(R.id.list_item_icon);
+        iconView.setImageResource(R.drawable.ic_info_black_24dp);
+
+        String forecastDesc = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
+        TextView textViewDescription = (TextView)view.findViewById(R.id.list_item_forecat_textview);
+        textViewDescription.setText(forecastDesc);
+
+        long dateInMillis = cursor.getLong(ForecastFragment.COL_WEATHER_DATE);
+        TextView textViewDate = (TextView) view.findViewById(R.id.list_item_date_textview);
+        textViewDate.setText(Utility.getDayName(context,dateInMillis));
+
+        boolean isMetric = Utility.isMetric(context);
+
+        double high = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
+        TextView textHigh = (TextView)view.findViewById(R.id.list_item_max_textview);
+        textHigh.setText(Utility.formatTemperature(high,isMetric));
+
+        double min = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
+        TextView textMin = (TextView)view.findViewById(R.id.list_item_min_textview);
+        textMin.setText(Utility.formatTemperature(min, isMetric));
+
     }
 }

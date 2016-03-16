@@ -3,11 +3,57 @@ package anisia.sunny;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.format.Time;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utility {
+    public static final String DATE_FORMAT = "yyyyMMdd";
+
+    public static String GetDayString(Context context, long dateMillis){
+        Time time = new Time();
+        time.setToNow();
+        long currentTime = System.currentTimeMillis();
+        int julianDay = Time.getJulianDay(dateMillis, time.gmtoff);
+        int currentJulianDay = Time.getJulianDay(currentTime, time.gmtoff);
+
+        return getDayName(context, dateMillis);
+
+    }
+
+    public static String getDayName(Context context, long dateInMillis){
+        Time t = new Time();
+        t.setToNow();
+        int julianDay = Time.getJulianDay(dateInMillis, t.gmtoff);
+        int currentJulianDay = Time.getJulianDay(System.currentTimeMillis(), t.gmtoff);
+        if (julianDay == currentJulianDay) {
+            return context.getString(R.string.today);
+        } else if ( julianDay == currentJulianDay +1 ) {
+            return context.getString(R.string.tomorrow);
+        } else if (currentJulianDay +1 < julianDay && julianDay < currentJulianDay +7){
+            Time time = new Time();
+            time.setToNow();
+            // Otherwise, the format is just the day of the week (e.g "Wednesday".
+            SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
+            return dayFormat.format(dateInMillis);
+        } else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd");
+            return dateFormat.format(dateInMillis);
+        }
+    }
+
+    public static String getFormattedMonthDay(Context context, long dateInMillis){
+        Time time = new Time();
+        time.setToNow();
+        SimpleDateFormat dbDateFormat = new SimpleDateFormat(Utility.DATE_FORMAT);
+        SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM dd");
+        String monthDayString = monthDayFormat.format(dateInMillis);
+        return monthDayString;
+
+    }
+
     public static String getPreferredLocation(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_location_key),
@@ -23,8 +69,8 @@ public class Utility {
 
     static String formatTemperature(double temperature, boolean isMetric) {
         double temp;
-        if ( !isMetric ) {
-            temp = 9*temperature/5+32;
+        if (!isMetric) {
+            temp = 9 * temperature / 5 + 32;
         } else {
             temp = temperature;
         }

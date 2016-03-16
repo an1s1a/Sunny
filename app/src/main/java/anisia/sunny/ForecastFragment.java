@@ -30,7 +30,7 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
     public final static String EXTRA_MESSAGE = "anisia.sunny.MESSAGE";
     private final static int FORECAST_LOADER = 0;
     private static final String[] FORECAST_COLUMNS = {
-            WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID ,
+            WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,
             WeatherContract.WeatherEntry.COLUMN_DATE,
             WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
             WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
@@ -99,7 +99,7 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                if(cursor != null){
+                if (cursor != null) {
                     String locationSetting = Utility.getPreferredLocation(getActivity());
                     Intent intent = new Intent(getActivity(), DetailActivity.class).setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE)));
                     startActivity(intent);
@@ -143,7 +143,7 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
         weatherTask.execute(location);
     }
 
-    public void onLocationChanged(){
+    public void onLocationChanged() {
         updateWeather();
         getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
     }

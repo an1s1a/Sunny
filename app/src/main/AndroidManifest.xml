@@ -45,8 +45,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="anisia.sunny.MainActivity" />
         </activity>
-        <provider android:name=".data.WeatherProvider"
-            android:authorities="anisia.sunny"/>
+
+        <provider
+            android:name=".data.WeatherProvider"
+            android:authorities="anisia.sunny" />
     </application>
 
 </manifest>
