@@ -16,6 +16,10 @@ import anisia.sunny.data.WeatherContract;
  * from a {@link android.database.Cursor} to a {@link android.widget.ListView}.
  */
 public class ForecastAdapter extends CursorAdapter {
+
+    private final int VIEW_TYPE_TODAY = 0;
+    private final int VIEW_TYPE_FUTURE_DAY = 1;
+
     public ForecastAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
@@ -52,11 +56,36 @@ public class ForecastAdapter extends CursorAdapter {
     /*
         Remember that these views are reused as needed.
      */
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_item_forecast, parent, false);
-
-        return view;
+        int viewType = getItemViewType(cursor.getPosition());
+        int viewId = -1;
+        switch (viewType) {
+            case VIEW_TYPE_TODAY: {
+                viewId = R.layout.list_item_forecast_today;
+                break;
+            }
+            case VIEW_TYPE_FUTURE_DAY: {
+                viewId = R.layout.list_item_forecast;
+                break;
+            }
+        }
+        return LayoutInflater.from(context).inflate(viewId, parent, false);
     }
 
     /*
@@ -68,25 +97,25 @@ public class ForecastAdapter extends CursorAdapter {
         // we'll keep the UI functional with a simple (and slow!) binding.
 
         int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_ID);
-        ImageView iconView = (ImageView)view.findViewById(R.id.list_item_icon);
+        ImageView iconView = (ImageView) view.findViewById(R.id.list_item_icon);
         iconView.setImageResource(R.drawable.ic_info_black_24dp);
 
         String forecastDesc = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
-        TextView textViewDescription = (TextView)view.findViewById(R.id.list_item_forecat_textview);
+        TextView textViewDescription = (TextView) view.findViewById(R.id.list_item_forecat_textview);
         textViewDescription.setText(forecastDesc);
 
         long dateInMillis = cursor.getLong(ForecastFragment.COL_WEATHER_DATE);
         TextView textViewDate = (TextView) view.findViewById(R.id.list_item_date_textview);
-        textViewDate.setText(Utility.getDayName(context,dateInMillis));
+        textViewDate.setText(Utility.getDayName(context, dateInMillis));
 
         boolean isMetric = Utility.isMetric(context);
 
         double high = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
-        TextView textHigh = (TextView)view.findViewById(R.id.list_item_max_textview);
-        textHigh.setText(Utility.formatTemperature(high,isMetric));
+        TextView textHigh = (TextView) view.findViewById(R.id.list_item_max_textview);
+        textHigh.setText(Utility.formatTemperature(high, isMetric));
 
         double min = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
-        TextView textMin = (TextView)view.findViewById(R.id.list_item_min_textview);
+        TextView textMin = (TextView) view.findViewById(R.id.list_item_min_textview);
         textMin.setText(Utility.formatTemperature(min, isMetric));
 
     }
