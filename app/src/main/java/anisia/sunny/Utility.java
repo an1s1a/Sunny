@@ -95,21 +95,83 @@ public class Utility {
         if (degree >= 337.5 || degree < 22.5) {
             direction = "N";
         } else if (degree >= 22.5 && degree < 67.5) {
-            direction ="NE";
+            direction = "NE";
         } else if (degree >= 67.5 && degree < 112.5) {
-            direction ="E";
+            direction = "E";
         } else if (degree >= 112.5 && degree < 157.5) {
-            direction ="SE";
+            direction = "SE";
         } else if (degree >= 157.5 && degree < 202.5) {
-            direction ="S";
+            direction = "S";
         } else if (degree >= 202.5 && degree < 247.5) {
-            direction ="SW";
+            direction = "SW";
         } else if (degree >= 247.4 && degree < 292.5) {
-            direction ="W";
+            direction = "W";
         } else if (degree >= 292.5 && degree < 22.5) {
-            direction ="NW";
+            direction = "NW";
         }
 
         return String.format(context.getString(windFormat), windSpeed, direction);
     }
+
+    public static int getResourceForWeatherCondition(int weatherId) {
+        if (weatherId >= 200 && weatherId <= 232) {
+            return R.drawable.storm;
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return R.drawable.light_rain;
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return R.drawable.rain;
+        } else if (weatherId == 511) {
+            return R.drawable.snow;
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return R.drawable.rain;
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return R.drawable.snow;
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return R.drawable.fog;
+        } else if (weatherId == 761 || weatherId == 781) {
+            return R.drawable.storm;
+        } else if (weatherId == 800) {
+            return R.drawable.sun;
+        } else if (weatherId == 801) {
+            return R.drawable.light_clouds;
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return R.drawable.cloud;
+        }
+        return -1;
+    }
+
+    /**
+     * Helper method to provide the art resource id according to the weather condition id returned
+     * by the OpenWeatherMap call.
+     * @param weatherId from OpenWeatherMap API response
+     * @return resource id for the corresponding image. -1 if no relation is found.
+     */
+    /**public static int getArtResourceForWeatherCondition(int weatherId) {
+     // Based on weather code data found at:
+     // http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
+     if (weatherId >= 200 && weatherId <= 232) {
+     return R.drawable.art_storm;
+     } else if (weatherId >= 300 && weatherId <= 321) {
+     return R.drawable.art_light_rain;
+     } else if (weatherId >= 500 && weatherId <= 504) {
+     return R.drawable.art_rain;
+     } else if (weatherId == 511) {
+     return R.drawable.art_snow;
+     } else if (weatherId >= 520 && weatherId <= 531) {
+     return R.drawable.art_rain;
+     } else if (weatherId >= 600 && weatherId <= 622) {
+     return R.drawable.art_rain;
+     } else if (weatherId >= 701 && weatherId <= 761) {
+     return R.drawable.art_fog;
+     } else if (weatherId == 761 || weatherId == 781) {
+     return R.drawable.art_storm;
+     } else if (weatherId == 800) {
+     return R.drawable.art_clear;
+     } else if (weatherId == 801) {
+     return R.drawable.art_light_clouds;
+     } else if (weatherId >= 802 && weatherId <= 804) {
+     return R.drawable.art_clouds;
+     }
+     return -1;
+     }*/
 }

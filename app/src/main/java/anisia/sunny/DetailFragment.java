@@ -135,9 +135,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Log.v(LOG_TAG, "In on loaedFinished()");
         if (data != null && data.moveToFirst()) {
             //Read weather_ID from cursor data
-            int weatherId = data.getInt(COL_WEATHER_ID);
+            int weatherId = data.getInt(COL_WEATTHER_CONDITION_ID);
             //Use for now a preset icon for the weather
-            iconView.setImageResource(R.drawable.ic_info_black_24dp);
+            iconView.setImageResource(Utility.getResourceForWeatherCondition(weatherId));
 
             //Read description and update view for weather description
             String description = data.getString(COL_WEATHER_DESC);

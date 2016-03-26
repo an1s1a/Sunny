@@ -85,7 +85,19 @@ public class ForecastAdapter extends CursorAdapter {
         // we'll keep the UI functional with a simple (and slow!) binding.
         ViewHolder holder = (ViewHolder)view.getTag();
 
-        holder.iconView.setImageResource(R.drawable.ic_info_black_24dp);
+        /**int viewType = getItemViewType(cursor.getPosition());
+
+        switch(viewType){
+            case VIEW_TYPE_TODAY: {
+                holder.iconView.setImageResource(Utility.getResourceForWeatherCondition(cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID)));
+                break;
+            }
+            case VIEW_TYPE_FUTURE_DAY: {
+                holder.iconView.setImageResource(Utility.getResourceForArtWeatherCondition(ForecastFragment.COL_WEATHER_CONDITION_ID));
+                break;
+            }
+        }*/
+        holder.iconView.setImageResource(Utility.getResourceForWeatherCondition(cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID)));
 
         String forecastDesc = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
         holder.descriptionView.setText(forecastDesc);
