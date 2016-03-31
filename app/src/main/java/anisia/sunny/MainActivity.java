@@ -12,7 +12,8 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    private final String FORECASTFRAGMENR_TAG = "FFTAG";
+    private final String DETAILFRAGMENT_TAG = "DFTAG";
+    private boolean mTwoPane;
 
     private String location;
 
@@ -21,11 +22,15 @@ public class MainActivity extends AppCompatActivity {
         location = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ForecastFragment(), FORECASTFRAGMENR_TAG)
-                    .commit();
+        if (findViewById(R.id.weather_detail_container) != null) {
+            mTwoPane = true;
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG).commit();
+            }
+        } else {
+            mTwoPane = false;
         }
+
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
     }
 
@@ -58,19 +63,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(location != null && !Utility.getPreferredLocation(this).equals(location)){
-            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENR_TAG);
-            if(ff != null){
+        if (location != null && !Utility.getPreferredLocation(this).equals(location)) {
+            ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+            if (ff != null) {
                 ff.onLocationChanged();
             }
             location = Utility.getPreferredLocation(this);
         }
     }
 
-    public void showOnMap(){
+    public void showOnMap() {
         String location = Utility.getPreferredLocation(this);
 
-        Uri uriLocation = Uri.parse("geo:0,0?").buildUpon().appendQueryParameter("q",location).build();
+        Uri uriLocation = Uri.parse("geo:0,0?").buildUpon().appendQueryParameter("q", location).build();
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uriLocation);
