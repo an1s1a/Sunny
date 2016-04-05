@@ -56,6 +56,7 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
     private static final String SELECTED_KEY = "selected_position";
+    private boolean useTodayLayout;
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -131,6 +132,8 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
+        forecastAdapter.setUseTodayLayout(useTodayLayout);
+
         return rootView;
     }
 
@@ -168,6 +171,13 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
         FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
         String location = Utility.getPreferredLocation(getActivity());
         weatherTask.execute(location);
+    }
+
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        this.useTodayLayout = useTodayLayout;
+        if (forecastAdapter != null) {
+            forecastAdapter.setUseTodayLayout(this.useTodayLayout);
+        }
     }
 
     public void onLocationChanged() {

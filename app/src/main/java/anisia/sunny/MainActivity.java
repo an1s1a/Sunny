@@ -3,7 +3,6 @@ package anisia.sunny;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -31,7 +30,8 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             mTwoPane = false;
         }
 
-        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        ForecastFragment forecastFragment = ((ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
+        forecastFragment.setUseTodayLayout(!mTwoPane);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
-            return  true;
+            return true;
         } else if (id == R.id.action_map) {
             showOnMap();
             return true;
