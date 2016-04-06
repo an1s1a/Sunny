@@ -140,6 +140,33 @@ public class Utility {
         return -1;
     }
 
+    public static int getSmallResourceForWeatherCondition(int weatherId) {
+        if (weatherId >= 200 && weatherId <= 232) {
+            return R.drawable.small_storm;
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return R.drawable.small_light_rain;
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return R.drawable.small_rain;
+        } else if (weatherId == 511) {
+            return R.drawable.small_snow;
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return R.drawable.small_rain;
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return R.drawable.small_snow;
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return R.drawable.small_fog;
+        } else if (weatherId == 761 || weatherId == 781) {
+            return R.drawable.small_storm;
+        } else if (weatherId == 800) {
+            return R.drawable.small_sun;
+        } else if (weatherId == 801) {
+            return R.drawable.small_light_clouds;
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return R.drawable.small_cloud;
+        }
+        return -1;
+    }
+
     /**
      * Helper method to provide the art resource id according to the weather condition id returned
      * by the OpenWeatherMap call.
