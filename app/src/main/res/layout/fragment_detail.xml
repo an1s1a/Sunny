@@ -2,8 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="anisia.sunny.DetailActivity$PlaceHolderFragment">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/detail_text_date"
@@ -37,22 +36,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/detail_text_max_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="96sp"
-                    android:fontFamily="sans-serif-light"/>
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="96sp" />
 
                 <TextView
                     android:id="@+id/detail_text_min_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
-                    android:textSize="48sp"/>
+                    android:textSize="48sp" />
 
             </LinearLayout>
 
@@ -72,8 +71,8 @@
                     android:id="@+id/detail_text_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:fontFamily="sans-serif-condensed"/>
+                    android:fontFamily="sans-serif-condensed"
+                    android:textAppearance="?android:textAppearanceLarge" />
 
             </LinearLayout>
         </LinearLayout>
@@ -83,23 +82,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
-            android:textAppearance="?android:textAppearanceLarge"/>
-
-        <TextView
-            android:id="@+id/detail_text_wind"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"/>
+            android:textAppearance="?android:textAppearanceLarge" />
 
         <TextView
             android:id="@+id/detail_text_pressure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
-            android:textAppearance="?android:textAppearanceLarge"/>
+            android:textAppearance="?android:textAppearanceLarge" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/detail_text_wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:textAppearance="?android:textAppearanceLarge" />
+
+            <anisia.sunny.CompassView
+                android:id="@+id/my_compass"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_gravity=""
+                />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

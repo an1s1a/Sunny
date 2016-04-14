@@ -107,6 +107,7 @@ public class ForecastAdapter extends CursorAdapter {
 
         String forecastDesc = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
         holder.descriptionView.setText(forecastDesc);
+        holder.iconView.setContentDescription(forecastDesc);
 
         long dateInMillis = cursor.getLong(ForecastFragment.COL_WEATHER_DATE);
         holder.dateView.setText(Utility.GetDayString(context, dateInMillis));

@@ -69,6 +69,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView humidityView;
     private TextView windView;
     private TextView pressureView;
+    private CompassView compassView;
 
     public DetailFragment() {
         setHasOptionsMenu(true);
@@ -107,6 +108,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         humidityView = (TextView) rootView.findViewById(R.id.detail_text_humidity);
         windView = (TextView) rootView.findViewById(R.id.detail_text_wind);
         pressureView = (TextView) rootView.findViewById(R.id.detail_text_pressure);
+        compassView = (CompassView)rootView.findViewById(R.id.my_compass);
 
         return rootView;
     }
@@ -150,6 +152,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             String description = data.getString(COL_WEATHER_DESC);
             descriptionView.setText(description);
 
+            iconView.setContentDescription(description);
+
             //Read max temperature and update its view
             boolean isMetric = Utility.isMetric(getActivity());
 
@@ -179,6 +183,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             float windSpeed = data.getFloat(COL_WEATHER_WIND_SPEED);
             float windDirection = data.getFloat(COL_WEATHER_DEGREES);
             windView.setText(Utility.formatWind(getActivity(), windSpeed, windDirection));
+            compassView.update(windDirection);
 
             forecastDetail = String.format("%s - %s - %s/%s", dateText, description, maxTemp, minTemp);
 
