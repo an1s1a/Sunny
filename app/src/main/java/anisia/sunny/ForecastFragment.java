@@ -4,6 +4,7 @@ package anisia.sunny;
  * Created by Utente on 13/12/2015.
  */
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import anisia.sunny.data.WeatherContract;
+import anisia.sunny.service.SunnyService;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -168,9 +170,9 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
     }
 
     public void updateWeather() {
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
-        String location = Utility.getPreferredLocation(getActivity());
-        weatherTask.execute(location);
+        Intent intent = new Intent(getActivity(), SunnyService.class);
+        intent.putExtra(SunnyService.LOCATION_QUERY_EXTRA, Utility.getPreferredLocation(getActivity()));
+        getActivity().startService(intent);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {

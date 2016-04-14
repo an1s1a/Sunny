@@ -184,6 +184,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             float windDirection = data.getFloat(COL_WEATHER_DEGREES);
             windView.setText(Utility.formatWind(getActivity(), windSpeed, windDirection));
             compassView.update(windDirection);
+            compassView.setContentDescription(String.valueOf(windDirection));
 
             forecastDetail = String.format("%s - %s - %s/%s", dateText, description, maxTemp, minTemp);
 
