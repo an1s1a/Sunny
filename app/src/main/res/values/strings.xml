@@ -76,4 +76,8 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
 
+    <!-- SyncAdapter related -->
+    <string name="sync_account_type">anisia.sunny</string>
+    <string name="content_authority">anisia.sunny</string>
+
 </resources>
