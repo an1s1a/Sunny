@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,12 +15,12 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     private final String DETAILFRAGMENT_TAG = "DFTAG";
     private boolean mTwoPane;
 
-    private String location;
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        location = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
+        mLocation = Utility.getPreferredLocation(this);
         setContentView(R.layout.activity_main);
         if (findViewById(R.id.weather_detail_container) != null) {
             mTwoPane = true;
@@ -56,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
-        } else if (id == R.id.action_map) {
-            showOnMap();
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -68,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     @Override
     protected void onResume() {
         super.onResume();
-        if (location != null && !Utility.getPreferredLocation(this).equals(location)) {
+        String location = Utility.getPreferredLocation(this);
+        if (location != null && !location.equals(mLocation)) {
             ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
             if (ff != null) {
                 ff.onLocationChanged();
@@ -78,23 +75,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 df.onLocationChanged(Utility.getPreferredLocation(this));
             }
 
-            location = Utility.getPreferredLocation(this);
+            mLocation = Utility.getPreferredLocation(this);
         }
     }
 
-    public void showOnMap() {
-        String location = Utility.getPreferredLocation(this);
-
-        Uri uriLocation = Uri.parse("geo:0,0?").buildUpon().appendQueryParameter("q", location).build();
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(uriLocation);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        } else {
-            Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
-        }
-    }
 
     @Override
     public void onItemSelected(Uri dateUri) {

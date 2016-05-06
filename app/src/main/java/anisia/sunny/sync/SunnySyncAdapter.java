@@ -34,6 +34,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Vector;
 
 import anisia.sunny.BuildConfig;
@@ -112,6 +113,7 @@ public class SunnySyncAdapter extends AbstractThreadedSyncAdapter {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
+            Log.i(LOG_TAG, "URL " + url);
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
@@ -205,7 +207,7 @@ public class SunnySyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         locationCursor.close();
-        // Wait, that worked?  Yes!
+
         return locationId;
     }
 
@@ -257,7 +259,7 @@ public class SunnySyncAdapter extends AbstractThreadedSyncAdapter {
             double cityLongitude = cityCoord.getDouble(OWM_LONGITUDE);
 
             long locationId = addLocation(locationSetting, cityName, cityLatitude, cityLongitude);
-
+            Log.i(LOG_TAG, "Location inserita = " + cityName);
             // Insert the new weather information into the database
             Vector<ContentValues> cVVector = new Vector<ContentValues>(weatherArray.length());
 
@@ -338,6 +340,13 @@ public class SunnySyncAdapter extends AbstractThreadedSyncAdapter {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
                 getContext().getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, cvArray);
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.DATE, -1);
+                //String yesterday = Utility.formatDate(calendar.getTimeInMillis());
+                String yesterday = Long.toString(dayTime.setJulianDay(julianStartDay-1));
+                getContext().getContentResolver().delete(WeatherContract.WeatherEntry.CONTENT_URI,
+                        WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?",
+                        new String[] {yesterday});
                 notifyWeather();
             }
 

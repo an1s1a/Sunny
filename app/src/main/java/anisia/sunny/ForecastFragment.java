@@ -4,12 +4,14 @@ package anisia.sunny;
  * Created by Utente on 13/12/2015.
  */
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +30,7 @@ import anisia.sunny.sync.SunnySyncAdapter;
 public class ForecastFragment extends Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
 
     public final static String EXTRA_MESSAGE = "anisia.sunny.MESSAGE";
+    public static final String LOG_TAG = ForecastFragment.class.getSimpleName();
     private final static int FORECAST_LOADER = 0;
     private static final String[] FORECAST_COLUMNS = {
             WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,
@@ -43,15 +46,15 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
 
     //These indices are linked to FORECAST_COLUMNS if FORECAST_COLUMNS change you have to modify also
     //these indices, because they represent the number of the column
-    static final int COL_WEATHER_ID = 0;
-    static final int COL_WEATHER_DATE = 1;
-    static final int COL_WEATHER_DESC = 2;
-    static final int COL_WEATHER_MAX_TEMP = 3;
-    static final int COL_WEATHER_MIN_TEMP = 4;
-    static final int COL_LOCATION_SETTING = 5;
-    static final int COL_WEATHER_CONDITION_ID = 6;
-    static final int COL_LOCATION_LAT = 7;
-    static final int COL_LOCATION_LONG = 8;
+    public static final int COL_WEATHER_ID = 0;
+    public static final int COL_WEATHER_DATE = 1;
+    public static final int COL_WEATHER_DESC = 2;
+    public static final int COL_WEATHER_MAX_TEMP = 3;
+    public static final int COL_WEATHER_MIN_TEMP = 4;
+    public static final int COL_LOCATION_SETTING = 5;
+    public static final int COL_WEATHER_CONDITION_ID = 6;
+    public static final int COL_LOCATION_LAT = 7;
+    public static final int COL_LOCATION_LONG = 8;
 
     private ForecastAdapter forecastAdapter;
     private ListView mListView;
@@ -88,12 +91,20 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if(id == R.id.action_map){
+            openPreferredLocationInMap();
+            return true;
+        }
+        /*
         if (id == R.id.action_refresh) {
             updateWeather();
             return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
     @Override
@@ -120,8 +131,8 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
                     ((Callback) getActivity()).onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
                             locationSetting, cursor.getLong(COL_WEATHER_DATE)
                     ));
-                    mPosition = position;
                 }
+                mPosition = position;
             }
         });
         // If there's instance state, mine it for useful information.
@@ -192,5 +203,29 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
             outState.putInt(SELECTED_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    private void openPreferredLocationInMap(){
+        if ( null != forecastAdapter ) {
+            Cursor c = forecastAdapter.getCursor();
+            if ( null != c ) {
+                c.moveToFirst();
+                Log.i(LOG_TAG, "Cursor " + c.toString());
+                String posLat = c.getColumnName(COL_LOCATION_LAT);
+                Log.i(LOG_TAG, "Cursor lat" + posLat);
+                String posLong = c.getString(COL_LOCATION_LONG);
+                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(geoLocation);
+
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+                }
+            }
+
+        }
     }
 }
