@@ -41,8 +41,9 @@
                 android:id="@+id/list_item_forecat_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:textAppearanceSmall" />
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/font_light_grey"/>
         </LinearLayout>
 
         <LinearLayout
@@ -63,8 +64,9 @@
                 android:id="@+id/list_item_min_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:textAppearanceSmall"/>
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/font_light_grey"/>
         </LinearLayout>
 
     </LinearLayout>
