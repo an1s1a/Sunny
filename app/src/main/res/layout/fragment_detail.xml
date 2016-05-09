@@ -83,15 +83,17 @@
             android:id="@+id/detail_text_humidity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:textAppearance="?android:textAppearanceLarge" />
+            android:fontFamily="sans-serif"
+            android:textAppearance="?android:textAppearanceMedium" />
 
         <TextView
             android:id="@+id/detail_text_pressure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:textAppearance="?android:textAppearanceLarge" />
+            android:fontFamily="sans-serif"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,8 +105,8 @@
                 android:id="@+id/detail_text_wind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:textAppearance="?android:textAppearanceLarge" />
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:textAppearanceMedium" />
 
             <anisia.sunny.CompassView
                 android:id="@+id/my_compass"

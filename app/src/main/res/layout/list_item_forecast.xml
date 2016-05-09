@@ -5,12 +5,19 @@
     android:background="@drawable/touch_selector"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:divider="@drawable/dash"
+    android:layerType="software"
+
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:backgroundTint="@color/grey_background">
 
         <FrameLayout
             android:layout_width="60dp"
@@ -41,8 +48,10 @@
                 android:id="@+id/list_item_forecat_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:textAppearance="?android:textAppearanceSmall"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.1"
+                android:textAllCaps="true"
+                android:textSize="12sp"
                 android:textColor="@color/font_light_grey"/>
         </LinearLayout>
 
@@ -64,7 +73,9 @@
                 android:id="@+id/list_item_min_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:textSize="12sp"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/font_light_grey"/>
         </LinearLayout>
@@ -75,9 +86,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="4dp">
+        android:padding="6dp">
 
-        <View style="@style/Divider"/>
+        <ImageView
+            android:src="@drawable/dash"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"/>
 
 
     </LinearLayout>

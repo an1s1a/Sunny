@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#FFBA00</color>
     <color name="colorAccent">#FF4081</color>
     <color name="sunny_yellow">#FFCC00</color>
-    <color name="font_color">#333333</color>
-    <color name="font_light_grey">#757575</color>
-    <color name="light_grey">#EFEFEF</color>
+    <color name="font_color">#444444</color>
+    <color name="font_light_grey">#AAAAAA</color>
+    <color name="light_grey">#CCCCCC</color>
+    <color name="grey_background">#cacaca</color>
 </resources>

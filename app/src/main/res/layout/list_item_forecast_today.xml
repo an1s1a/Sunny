@@ -5,13 +5,14 @@
     android:background="@drawable/today_touch_selector"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    >
+    android:layerType="software">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="60dp">
+        android:paddingLeft="60dp"
+        android:paddingBottom="5dp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -79,7 +80,10 @@
         android:orientation="horizontal"
         android:padding="4dp">
 
-        <View style="@style/Divider"/>
+        <ImageView
+            android:src="@drawable/dash"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"/>
 
     </LinearLayout>
 
