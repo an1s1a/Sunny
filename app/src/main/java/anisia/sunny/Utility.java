@@ -2,6 +2,8 @@ package anisia.sunny;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
 
@@ -9,8 +11,22 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import anisia.sunny.sync.SunnySyncAdapter;
+
 public class Utility {
     public static final String DATE_FORMAT = "yyyyMMdd";
+
+    public static boolean isConnected(Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected;
+        if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
+            isConnected = true;
+        } else {
+            isConnected = false;
+        }
+        return isConnected;
+    }
 
     public static String GetDayString(Context context, long dateMillis) {
         Time time = new Time();
@@ -58,6 +74,14 @@ public class Utility {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_location_key),
                 context.getString(R.string.pref_default_location));
+    }
+
+
+    @SuppressWarnings("ResourceType")
+    public static @SunnySyncAdapter.LocationStatus int getLocationStatus(Context context){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        int locationStatus = sp.getInt(context.getString(R.string.pref_location_status_key), SunnySyncAdapter.LOCATION_STATUS_UNKNOWN);
+        return locationStatus;
     }
 
     public static boolean isMetric(Context context) {

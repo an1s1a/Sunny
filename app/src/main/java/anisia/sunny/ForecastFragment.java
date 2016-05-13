@@ -5,9 +5,11 @@ package anisia.sunny;
  */
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import anisia.sunny.data.WeatherContract;
 import anisia.sunny.sync.SunnySyncAdapter;
@@ -27,7 +30,7 @@ import anisia.sunny.sync.SunnySyncAdapter;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor> {
+public class ForecastFragment extends Fragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public final static String EXTRA_MESSAGE = "anisia.sunny.MESSAGE";
     public static final String LOG_TAG = ForecastFragment.class.getSimpleName();
@@ -62,6 +65,12 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
     private static final String SELECTED_KEY = "selected_position";
     private boolean useTodayLayout;
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(getString(R.string.pref_location_status_key)));
+        updateEmptyView();
+    }
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -89,6 +98,20 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
     }
 
     @Override
+    public void onResume() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -104,9 +127,6 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
@@ -121,6 +141,8 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        View emptyListView = rootView.findViewById(R.id.listview_forecast_empty);
+        mListView.setEmptyView(emptyListView);
         mListView.setAdapter(forecastAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -172,6 +194,7 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
         if (mPosition != ListView.INVALID_POSITION) {
             mListView.smoothScrollToPosition(mPosition);
         }
+        updateEmptyView();
     }
 
     @Override
@@ -226,6 +249,30 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
                 }
             }
 
+        }
+    }
+
+    public void updateEmptyView(){
+        if(forecastAdapter.getCount() == 0){
+            TextView textView = (TextView) getView().findViewById(R.id.listview_forecast_empty);
+            if(textView != null){
+                boolean isConnected = Utility.isConnected(getActivity());
+                int message = R.string.empty_string;
+                @SunnySyncAdapter.LocationStatus int location = Utility.getLocationStatus(getActivity());
+                switch (location){
+                    case SunnySyncAdapter.LOCATION_STATUS_SERVER_DOWN:
+                        message = R.string.empty_forecast_list_server_down;
+                        break;
+                    case SunnySyncAdapter.LOCATION_STATUS_SERVER_INVALID:
+                        message = R.string.empty_forecast_list_server_error;
+                        break;
+                    default:
+                        if(!isConnected){
+                            message = R.string.empty_string_no_connection;
+                        }
+                }
+                textView.setText(message);
+            }
         }
     }
 }
