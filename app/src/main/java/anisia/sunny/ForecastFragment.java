@@ -266,6 +266,8 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
                     case SunnySyncAdapter.LOCATION_STATUS_SERVER_INVALID:
                         message = R.string.empty_forecast_list_server_error;
                         break;
+                    case SunnySyncAdapter.LOCATION_STATUS_INVALID:
+                        message = R.string.empty_forecast_list_invalid_location;
                     default:
                         if(!isConnected){
                             message = R.string.empty_string_no_connection;

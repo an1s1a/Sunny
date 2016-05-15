@@ -2,12 +2,16 @@ package anisia.sunny;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
+import anisia.sunny.data.WeatherContract;
+import anisia.sunny.sync.SunnySyncAdapter;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -20,7 +24,7 @@ import android.preference.PreferenceManager;
 
 //TODO non usare PreferenceActivity ma PreferenceFragment perchè dalle api 3.0 in poi è preferibile
 public class SettingsActivity extends PreferenceActivity
-        implements Preference.OnPreferenceChangeListener {
+        implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,4 +80,13 @@ public class SettingsActivity extends PreferenceActivity
         return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(getString(R.string.pref_location_status_key))){
+            Utility.resetLocationStatus(this);
+            SunnySyncAdapter.syncImmediately(this);
+        } else if(key.equals(getString(R.string.pref_temperature_units_key))){
+            getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
+        }
+    }
 }

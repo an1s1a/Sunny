@@ -84,6 +84,13 @@ public class Utility {
         return locationStatus;
     }
 
+    public static void resetLocationStatus(Context context){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(context.getString(R.string.pref_location_status_key), SunnySyncAdapter.LOCATION_STATUS_UNKNOWN);
+        spe.apply();
+    }
+
     public static boolean isMetric(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(context.getString(R.string.pref_temperature_units_key),
