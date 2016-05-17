@@ -216,7 +216,6 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
     }
 
     public void onLocationChanged() {
-        updateWeather();
         getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
     }
 
@@ -234,9 +233,10 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
             if ( null != c ) {
                 c.moveToFirst();
                 Log.i(LOG_TAG, "Cursor " + c.toString());
-                String posLat = c.getColumnName(COL_LOCATION_LAT);
+                String posLat = c.getString(COL_LOCATION_LAT);
                 Log.i(LOG_TAG, "Cursor lat" + posLat);
                 String posLong = c.getString(COL_LOCATION_LONG);
+                Log.i(LOG_TAG, c.getString(COL_LOCATION_SETTING));
                 Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -268,6 +268,8 @@ public class ForecastFragment extends Fragment implements android.support.v4.app
                         break;
                     case SunnySyncAdapter.LOCATION_STATUS_INVALID:
                         message = R.string.empty_forecast_list_invalid_location;
+                        Log.i(LOG_TAG, "Location invalid");
+                        break;
                     default:
                         if(!isConnected){
                             message = R.string.empty_string_no_connection;

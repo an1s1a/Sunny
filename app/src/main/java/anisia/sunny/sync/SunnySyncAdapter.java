@@ -80,6 +80,7 @@ public class SunnySyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int LOCATION_STATUS_UNKNOWN = 3;
     public static final int LOCATION_STATUS_INVALID = 4;
 
+    private static String city = "";
 
     public SunnySyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -209,6 +210,8 @@ public class SunnySyncAdapter extends AbstractThreadedSyncAdapter {
             // Then add the data, along with the corresponding name of the data type,
             // so the content provider knows what kind of value is being inserted.
             locationValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
+            Log.i(getClass().getSimpleName(), WeatherContract.LocationEntry.COLUMN_CITY_NAME);
+            Log.i(getClass().getSimpleName(), cityName);
             locationValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
             locationValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, lat);
             locationValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, lon);
@@ -268,7 +271,6 @@ public class SunnySyncAdapter extends AbstractThreadedSyncAdapter {
 
         try {
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
-            JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
             boolean hasMessageCode = forecastJson.has(OWM_MESSAGE_CODE);
             if(hasMessageCode){
@@ -283,6 +285,8 @@ public class SunnySyncAdapter extends AbstractThreadedSyncAdapter {
                         return;
                 }
             }
+
+            JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
             JSONObject cityJson = forecastJson.getJSONObject(OWM_CITY);
             String cityName = cityJson.getString(OWM_CITY_NAME);
