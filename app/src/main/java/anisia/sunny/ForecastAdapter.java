@@ -90,22 +90,22 @@ public class ForecastAdapter extends CursorAdapter {
         // our view is pretty simple here --- just a text view
         // we'll keep the UI functional with a simple (and slow!) binding.
         ViewHolder holder = (ViewHolder) view.getTag();
-
+        int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
         int viewType = getItemViewType(cursor.getPosition());
 
         switch (viewType) {
             case VIEW_TYPE_TODAY: {
-                holder.iconView.setImageResource(Utility.getResourceForWeatherCondition(cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID)));
+                holder.iconView.setImageResource(Utility.getResourceForWeatherCondition(weatherId));
                 break;
             }
             case VIEW_TYPE_FUTURE_DAY: {
-                holder.iconView.setImageResource(Utility.getSmallResourceForWeatherCondition(cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID)));
+                holder.iconView.setImageResource(Utility.getSmallResourceForWeatherCondition(weatherId));
                 break;
             }
         }
 
 
-        String forecastDesc = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
+        String forecastDesc = Utility.getStringForWeatherCondition(context, weatherId);
         holder.descriptionView.setText(forecastDesc);
         holder.iconView.setContentDescription(forecastDesc);
 

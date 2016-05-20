@@ -149,7 +149,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             iconView.setImageResource(Utility.getResourceForWeatherCondition(weatherId));
 
             //Read description and update view for weather description
-            String description = data.getString(COL_WEATHER_DESC);
+            String description = Utility.getStringForWeatherCondition(getActivity(), weatherId);
             descriptionView.setText(description);
 
             iconView.setContentDescription(description);
