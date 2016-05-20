@@ -151,18 +151,21 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             //Read description and update view for weather description
             String description = Utility.getStringForWeatherCondition(getActivity(), weatherId);
             descriptionView.setText(description);
-
-            iconView.setContentDescription(description);
+            descriptionView.setContentDescription(getString(R.string.a11y_forecast, description));
 
             //Read max temperature and update its view
             boolean isMetric = Utility.isMetric(getActivity());
 
             double maxTemp = data.getDouble(COL_WEATHER_TEMP_MAX);
-            maxTempView.setText(Utility.formatTemperature(getActivity(), maxTemp, isMetric));
+            String maxTempString = Utility.formatTemperature(getActivity(), maxTemp);
+            maxTempView.setText(maxTempString);
+            maxTempView.setContentDescription(getString(R.string.a11y_max_temp, maxTempString));
 
             //Read min temperature from cursor data and update related view
             double minTemp = data.getDouble(COL_WEATHER_MIN_TEMP);
-            minTempView.setText(Utility.formatTemperature(getActivity(), minTemp, isMetric));
+            String minTempString = Utility.formatTemperature(getActivity(),minTemp);
+            minTempView.setText(minTempString);
+            minTempView.setContentDescription(getString(R.string.a11y_min_temp, minTempString));
 
             //Read date from cursor data and update related view
             long date = data.getLong(COL_WEATHER_DATE);
@@ -174,17 +177,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             //Read humidity from cursor data and update related view
             float humidity = data.getFloat(COL_WEATHER_HUMIDITY);
             humidityView.setText(getActivity().getString(R.string.format_humidity, humidity));
+            humidityView.setContentDescription(humidityView.getText());
 
             //Read pressure from cursor data and update related view
             float pressure = data.getFloat(COL_WEATHER_PRESSURE);
             pressureView.setText(getActivity().getString(R.string.format_pressure, pressure));
+            pressureView.setContentDescription(pressureView.getText());
 
             //Read wind from cursor data and update view
             float windSpeed = data.getFloat(COL_WEATHER_WIND_SPEED);
             float windDirection = data.getFloat(COL_WEATHER_DEGREES);
             windView.setText(Utility.formatWind(getActivity(), windSpeed, windDirection));
             compassView.update(windDirection);
-            compassView.setContentDescription(String.valueOf(windDirection));
+            compassView.setContentDescription(windView.getText());
 
             forecastDetail = String.format("%s - %s - %s/%s", dateText, description, maxTemp, minTemp);
 

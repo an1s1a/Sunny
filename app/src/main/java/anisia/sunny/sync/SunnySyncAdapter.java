@@ -519,8 +519,8 @@ public class SunnySyncAdapter extends AbstractThreadedSyncAdapter {
 
                     // Define the text of the forecast.
                     String contextText = String.format(context.getString(R.string.format_notification),
-                            desc, Utility.formatTemperature(context, max, Utility.isMetric(context)),
-                            Utility.formatTemperature(context, min, Utility.isMetric(context)));
+                            desc, Utility.formatTemperature(context, max),
+                            Utility.formatTemperature(context, min));
                     //Create notification
                     NotificationCompat.Builder notification = new NotificationCompat.Builder(getContext());
                     notification.setSmallIcon(iconId);

@@ -107,18 +107,20 @@ public class ForecastAdapter extends CursorAdapter {
 
         String forecastDesc = Utility.getStringForWeatherCondition(context, weatherId);
         holder.descriptionView.setText(forecastDesc);
-        holder.iconView.setContentDescription(forecastDesc);
+        holder.descriptionView.setContentDescription(context.getString(R.string.a11y_forecast, forecastDesc));
 
         long dateInMillis = cursor.getLong(ForecastFragment.COL_WEATHER_DATE);
         holder.dateView.setText(Utility.GetDayString(context, dateInMillis));
 
-        boolean isMetric = Utility.isMetric(context);
+        double highD = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
+        String high = Utility.formatTemperature(context, highD);
+        holder.maxTempView.setText(high);
+        holder.maxTempView.setContentDescription(context.getString(R.string.a11y_max_temp, high));
 
-        double high = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
-        holder.maxTempView.setText(Utility.formatTemperature(context, high, isMetric));
-
-        double min = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
-        holder.minTempView.setText(Utility.formatTemperature(context, min, isMetric));
+        double mind = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
+        String min = Utility.formatTemperature(context, mind);
+        holder.minTempView.setText(min);
+        holder.minTempView.setContentDescription(context.getString(R.string.a11y_min_temp, min));
 
     }
 }
