@@ -76,6 +76,11 @@ public class Utility {
                 context.getString(R.string.pref_default_location));
     }
 
+    public static String getPreferredIconPack(Context context){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getString(context.getString(R.string.pref_icon_pack_key), context.getString(R.string.pref_default_icon_pack));
+    }
+
 
     @SuppressWarnings("ResourceType")
     public static @SunnySyncAdapter.LocationStatus int getLocationStatus(Context context){
@@ -142,6 +147,33 @@ public class Utility {
         }
 
         return String.format(context.getString(windFormat), windSpeed, direction);
+    }
+
+    public static String getUrlForWeatherCondition(Context context, int weatherId) {
+        if (weatherId >= 200 && weatherId <= 232) {
+            return context.getString(R.string.format_icon_url, "storm");
+        } else if (weatherId >= 300 && weatherId <= 321) {
+            return context.getString(R.string.format_icon_url, "light_rain");
+        } else if (weatherId >= 500 && weatherId <= 504) {
+            return context.getString(R.string.format_icon_url, "rain");
+        } else if (weatherId == 511) {
+            return context.getString(R.string.format_icon_url, "snow");
+        } else if (weatherId >= 520 && weatherId <= 531) {
+            return context.getString(R.string.format_icon_url, "rain");
+        } else if (weatherId >= 600 && weatherId <= 622) {
+            return context.getString(R.string.format_icon_url, "snow");
+        } else if (weatherId >= 701 && weatherId <= 761) {
+            return context.getString(R.string.format_icon_url, "fog");
+        } else if (weatherId == 761 || weatherId == 781) {
+            return context.getString(R.string.format_icon_url, "storm");
+        } else if (weatherId == 800) {
+            return context.getString(R.string.format_icon_url, "clear");
+        } else if (weatherId == 801) {
+            return context.getString(R.string.format_icon_url, "light_clouds");
+        } else if (weatherId >= 802 && weatherId <= 804) {
+            return context.getString(R.string.format_icon_url, "clouds");
+        }
+        return null;
     }
 
     public static int getResourceForWeatherCondition(int weatherId) {

@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import anisia.sunny.data.WeatherContract;
 
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -143,10 +145,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.v(LOG_TAG, "In on loaedFinished()");
+        String pref_icon = Utility.getPreferredIconPack(getActivity());
         if (data != null && data.moveToFirst()) {
             //Read weather_ID from cursor data
             int weatherId = data.getInt(COL_WEATTHER_CONDITION_ID);
-            iconView.setImageResource(Utility.getResourceForWeatherCondition(weatherId));
+            //Check icon pack preference
+            if(pref_icon.equalsIgnoreCase(getContext().getString(R.string.app_name))){
+                iconView.setImageResource(Utility.getResourceForWeatherCondition(weatherId));
+            } else {
+                Glide.with(this)
+                        .load(Utility.getUrlForWeatherCondition(getActivity(), weatherId))
+                        .error(Utility.getResourceForWeatherCondition(weatherId))
+                        .into(iconView);
+            }
 
             //Read description and update view for weather description
             String description = Utility.getStringForWeatherCondition(getActivity(), weatherId);

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 /**
  * {@link ForecastAdapter} exposes a list of weather forecasts
  * from a {@link android.database.Cursor} to a {@link android.widget.ListView}.
@@ -92,18 +94,35 @@ public class ForecastAdapter extends CursorAdapter {
         ViewHolder holder = (ViewHolder) view.getTag();
         int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
         int viewType = getItemViewType(cursor.getPosition());
+        int fallbackIcon = 0;
+        String pref_icon = Utility.getPreferredIconPack(context);
 
         switch (viewType) {
             case VIEW_TYPE_TODAY: {
-                holder.iconView.setImageResource(Utility.getResourceForWeatherCondition(weatherId));
+                if(pref_icon.equalsIgnoreCase(context.getString(R.string.app_name))){
+                    holder.iconView.setImageResource(Utility.getResourceForWeatherCondition(weatherId));
+                } else {
+                    fallbackIcon = Utility.getResourceForWeatherCondition(weatherId);
+                }
                 break;
             }
             case VIEW_TYPE_FUTURE_DAY: {
-                holder.iconView.setImageResource(Utility.getSmallResourceForWeatherCondition(weatherId));
+                if(pref_icon.equalsIgnoreCase(context.getString(R.string.app_name))){
+                    holder.iconView.setImageResource(Utility.getSmallResourceForWeatherCondition(weatherId));
+                } else {
+                    fallbackIcon = Utility.getSmallResourceForWeatherCondition(weatherId);
+                }
                 break;
             }
         }
 
+        if(!pref_icon.equalsIgnoreCase(context.getString(R.string.app_name))){
+            Glide.with(mContext)
+                    .load(Utility.getUrlForWeatherCondition(mContext, weatherId))
+                    .error(fallbackIcon)
+                    .crossFade()
+                    .into(holder.iconView);
+        }
 
         String forecastDesc = Utility.getStringForWeatherCondition(context, weatherId);
         holder.descriptionView.setText(forecastDesc);

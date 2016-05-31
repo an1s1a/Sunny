@@ -173,4 +173,15 @@
 
     <string name="condition_unknown">Unknown (<xliff:g id="low">%1$s</xliff:g>)</string>
 
+    <!-- icon -->
+    <string name="pref_icon_pack_label">Icon Pack</string>
+    <string name="pref_icon_pack_key" translatable="false">art_pack</string>
+    <string name="pref_icon_url_sunshine" translatable="false">https://raw.githubusercontent.com/udacity/Sunshine-Version-2/sunshine_master/app/src/main/res/drawable-xxhdpi/art_%s.png</string>
+    <string name="format_icon_url" translatable="false">https://raw.githubusercontent.com/udacity/Sunshine-Version-2/sunshine_master/app/src/main/res/drawable-xxhdpi/art_<xliff:g id="description">%s</xliff:g>.png</string>
+    <string name="pref_default_icon_pack">Sunny</string>
+    <string name="pref_icon_label_sunny">Sunny</string>
+    <string name="pref_icon_label_sunshine">Sunshine</string>
+
+
+
 </resources>

@@ -36,6 +36,7 @@ public class SettingsActivity extends PreferenceActivity
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_temperature_units_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_icon_pack_key)));
     }
 
     @Override
@@ -105,7 +106,7 @@ public class SettingsActivity extends PreferenceActivity
                 default:
                     preference.setSummary(stringValue);
             }
-        }else {
+        }  else {
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
@@ -123,6 +124,12 @@ public class SettingsActivity extends PreferenceActivity
         } else if(key.equals(getString(R.string.pref_location_status_key))){
             Preference preference = findPreference(getString(R.string.pref_location_key));
             bindPreferenceSummaryToValue(preference);
+        } else if (key.equals(getString(R.string.pref_icon_pack_key))) {
+            String pref_icon = Utility.getPreferredIconPack(getApplicationContext());
+            //if((pref_icon.equalsIgnoreCase(getString(R.string.app_name)))){
+                getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
+            //}
+
         }
     }
 

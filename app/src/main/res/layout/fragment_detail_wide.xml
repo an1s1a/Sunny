@@ -98,7 +98,8 @@
                 android:id="@+id/detail_image_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"/>
 
             <TextView
                 android:id="@+id/detail_text_description"
